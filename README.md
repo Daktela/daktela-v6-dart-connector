@@ -1,3 +1,3 @@
-# dart-sdk
+# Dart SDK
 
 Daktela's Dart SDK

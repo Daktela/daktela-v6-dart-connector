@@ -1,0 +1,15 @@
+linter:
+  rules:
+    - always_use_package_imports
+    - prefer_single_quotes
+    - throw_in_finally
+    - always_declare_return_types
+    - eol_at_end_of_file
+    - one_member_abstracts
+    - only_throw_errors
+    - prefer_const_declarations
+    - prefer_null_aware_method_calls
+    - unnecessary_final
+    - unnecessary_lambdas
+    - unnecessary_parenthesis
+    - prefer_interpolation_to_compose_strings

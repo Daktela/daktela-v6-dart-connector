@@ -1,0 +1,17 @@
+name: daktela_connector
+description: Daktela Connector is SDK from Daktela s.r.o. It enables you to implement custom scripts or apps, which communicates with standard Daktela V6 API.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0
+homepage: https://example-pet-store.com/newtify
+documentation: https://example-pet-store.com/newtify/docs
+
+environment:
+  sdk: '>=2.15.0 <3.0.0'
+
+dependencies:
+  http: ^0.13.4
+
+
+dev_dependencies:
+  test: '>=1.15.0 <2.0.0'
+  dotenv: ^4.0.1
