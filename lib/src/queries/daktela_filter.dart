@@ -7,18 +7,32 @@ class DaktelaFilter {
 
   factory DaktelaFilter.simple(DaktelaFilterField field) => DaktelaFilter(logic: 'and', fields: [field]);
 
-  factory DaktelaFilter.fromJson(Map<String, dynamic> json) {
+  factory DaktelaFilter.fromJson(dynamic json) {
     List<DaktelaFilterField> fields = [];
     List<DaktelaFilter> filters = [];
-    (json['filters'] as List).forEach((element) {
-      Map<String, dynamic> json = element;
-      if (json.containsKey('logic')) {
-        filters.add(DaktelaFilter.fromJson(json));
+    String logic = 'and';
+    if (json is List) {
+      json.forEach((e) {
+        try {
+          fields.add(DaktelaFilterField.fromJson(e));
+        } catch (e) {}
+      });
+    } else if (json is Map<String, dynamic>) {
+      if (json['logic'] != null) {
+        logic = json['logic'];
+        (json['filters'] as List).forEach((element) {
+          Map<String, dynamic> json = element;
+          if (json['logic'] != null) {
+            filters.add(DaktelaFilter.fromJson(json));
+          } else {
+            fields.add(DaktelaFilterField.fromJson(json));
+          }
+        });
       } else {
         fields.add(DaktelaFilterField.fromJson(json));
       }
-    });
-    return DaktelaFilter(logic: json['logic'] ?? '', fields: fields, filters: filters);
+    }
+    return DaktelaFilter(logic: logic, fields: fields, filters: filters);
   }
 }
 

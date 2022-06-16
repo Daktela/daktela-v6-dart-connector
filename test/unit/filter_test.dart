@@ -4,6 +4,7 @@ import 'package:test/test.dart';
 void main() {
   test('Tests construction of FilterField', _filterFieldTest);
   test('Tests construction of Filter', _filterTest);
+  test('Tests parsing of Filter and FilterField', _parseTest);
 }
 
 void _filterFieldTest() {
@@ -12,12 +13,6 @@ void _filterFieldTest() {
   expect(f.operator, 'isnull');
   expect(f.value, isNull);
   expect(f.ignoreCase, false);
-
-  f = DaktelaFilterField.fromJson({'field': 'bla', 'operator': 'neq', 'value': 'noname', 'ignoreCase': 'true'});
-  expect(f.field, 'bla');
-  expect(f.operator, 'neq');
-  expect(f.value, ['noname']);
-  expect(f.ignoreCase, true);
 }
 
 void _filterTest() {
@@ -67,4 +62,82 @@ void _filterTest() {
   expect(filter.logic, 'xxx');
   expect(filter.filters, isNull);
   expect(filter.fields, isNull);
+}
+
+void _parseTest() {
+  var f = DaktelaFilterField.fromJson({'field': 'bla', 'operator': 'neq', 'value': 'noname', 'ignoreCase': 'true'});
+  expect(f.field, 'bla');
+  expect(f.operator, 'neq');
+  expect(f.value, ['noname']);
+  expect(f.ignoreCase, true);
+
+  var filter = DaktelaFilter.fromJson({'field': 'firstname', 'operator': 'eq', 'value': 'John'});
+  expect(filter.logic, 'and');
+  expect(filter.filters, isEmpty);
+  expect(filter.fields?.length, 1);
+
+  f = filter.fields!.first;
+  expect(f.field, 'firstname');
+  expect(f.operator, 'eq');
+  expect(f.value, ['John']);
+
+  filter = DaktelaFilter.fromJson([
+    {'field': 'firstname', 'operator': 'eq', 'value': 'John'},
+    {'field': 'lastname', 'operator': 'neq', 'value': 'Smith'}
+  ]);
+  expect(filter.logic, 'and');
+  expect(filter.filters, isEmpty);
+  expect(filter.fields?.length, 2);
+
+  f = filter.fields![0];
+  expect(f.field, 'firstname');
+  expect(f.operator, 'eq');
+  expect(f.value, ['John']);
+  f = filter.fields![1];
+  expect(f.field, 'lastname');
+  expect(f.operator, 'neq');
+  expect(f.value, ['Smith']);
+
+  var json = {
+    'logic': 'or',
+    'filters': [
+      {'field': 'firstname', 'operator': 'eq', 'value': 'John'},
+      {'field': 'firstname', 'operator': 'eq', 'value': 'James'},
+      {
+        'logic': 'and',
+        'filters': [
+          {'field': 'firstname', 'operator': 'eq', 'value': 'David'},
+          {'field': 'lastname', 'operator': 'eq', 'value': 'Smith'}
+        ]
+      }
+    ]
+  };
+
+  filter = DaktelaFilter.fromJson(json);
+  expect(filter.logic, 'or');
+  expect(filter.fields?.length, 2);
+  expect(filter.filters?.length, 1);
+
+  f = filter.fields![0];
+  expect(f.field, 'firstname');
+  expect(f.operator, 'eq');
+  expect(f.value, ['John']);
+  f = filter.fields![1];
+  expect(f.field, 'firstname');
+  expect(f.operator, 'eq');
+  expect(f.value, ['James']);
+
+  filter = filter.filters!.first;
+  expect(filter.logic, 'and');
+  expect(filter.filters, isEmpty);
+  expect(filter.fields?.length, 2);
+
+  f = filter.fields![0];
+  expect(f.field, 'firstname');
+  expect(f.operator, 'eq');
+  expect(f.value, ['David']);
+  f = filter.fields![1];
+  expect(f.field, 'lastname');
+  expect(f.operator, 'eq');
+  expect(f.value, ['Smith']);
 }

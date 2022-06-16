@@ -7,6 +7,10 @@ class DaktelaPagination {
 
   DaktelaPagination({this.take = _defaultTake});
 
+  set skip(int skip) {
+    _skip = skip.abs();
+  }
+
   void next() => _skip += take;
 
   void back() {

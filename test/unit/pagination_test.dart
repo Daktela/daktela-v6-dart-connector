@@ -33,5 +33,16 @@ void main() {
     p.back();
     expect(p.loadedAll, false);
     expect(p.skip, 18);
+
+    p.skip = 358;
+    expect(p.skip, 358);
+    expect(p.take, 18);
+    expect((p..next()).skip, 376);
+    expect(
+        (p
+              ..back()
+              ..back())
+            .skip,
+        340);
   });
 }

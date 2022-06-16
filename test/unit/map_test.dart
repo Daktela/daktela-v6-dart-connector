@@ -9,8 +9,8 @@ void main() {
   });
 
   test('Tests sort map', () {
-    var s = SortField(field: 'edited', direction: 'desc');
-    var s2 = SortField(field: 'created', direction: 'asc');
+    var s = DaktelaSortField(field: 'edited', direction: 'desc');
+    var s2 = DaktelaSortField(field: 'created', direction: 'asc');
 
     var m = DaktelaQueryMap.build(sort: DaktelaSort.simple(s));
     expect(m.length, 2);

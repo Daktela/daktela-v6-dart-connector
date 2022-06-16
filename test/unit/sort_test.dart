@@ -7,11 +7,11 @@ void main() {
 }
 
 void _constructTest() {
-  var field = SortField(field: 'super_custom', direction: 'custom_dir');
+  var field = DaktelaSortField(field: 'super_custom', direction: 'custom_dir');
   expect(field.field, 'super_custom');
   expect(field.direction, 'custom_dir');
 
-  var field2 = SortField(field: 'edited', direction: 'desc');
+  var field2 = DaktelaSortField(field: 'edited', direction: 'desc');
   expect(field2.field, 'edited');
   expect(field2.direction, 'desc');
 
@@ -25,7 +25,7 @@ void _constructTest() {
 
 void _parseTest() {
   Map<String, dynamic> json = {'field': 'title', 'dir': 'asc'};
-  var sortField = SortField.fromJson(json);
+  var sortField = DaktelaSortField.fromJson(json);
   expect(sortField.field, 'title');
   expect(sortField.direction, 'asc');
 

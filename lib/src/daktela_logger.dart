@@ -1,7 +1,7 @@
 enum DaktelaLogLevel { off, minimal, verbose }
 
 class DaktelaLogger {
-  final Function(String message, {Object? error, StackTrace? stackTrace, DaktelaLogLevel? logLevel}) callback;
+  final Function(String message, {Object? error, StackTrace? stackTrace}) callback;
   final DaktelaLogLevel level;
 
   DaktelaLogger({required this.callback, this.level = DaktelaLogLevel.minimal});

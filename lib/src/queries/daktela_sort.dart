@@ -1,28 +1,28 @@
 class DaktelaSort {
-  final List<SortField> fields;
+  final List<DaktelaSortField> fields;
 
   DaktelaSort({required this.fields});
 
-  factory DaktelaSort.simple(SortField field) => DaktelaSort(fields: [field]);
+  factory DaktelaSort.simple(DaktelaSortField field) => DaktelaSort(fields: [field]);
 
   factory DaktelaSort.fromJson(dynamic json) {
-    List<SortField> fields;
+    List<DaktelaSortField> fields;
     if (json is List) {
       fields = json.map((e) {
-        return SortField.fromJson(e);
+        return DaktelaSortField.fromJson(e);
       }).toList();
     } else {
-      fields = [SortField.fromJson(json)];
+      fields = [DaktelaSortField.fromJson(json)];
     }
     return DaktelaSort(fields: fields);
   }
 }
 
-class SortField {
+class DaktelaSortField {
   final String field;
   final String direction;
 
-  SortField({required this.field, required this.direction});
+  DaktelaSortField({required this.field, required this.direction});
 
-  factory SortField.fromJson(Map<String, dynamic> json) => SortField(field: json['field'], direction: json['dir'] ?? '');
+  factory DaktelaSortField.fromJson(Map<String, dynamic> json) => DaktelaSortField(field: json['field'], direction: json['dir'] ?? '');
 }
