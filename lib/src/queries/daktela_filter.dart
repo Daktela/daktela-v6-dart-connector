@@ -1,10 +1,15 @@
+/// Allows to filter records by lists of type [DaktelaFilterField] and [DaktelaFilter]
+/// [logic] - logic operator of filter
+/// [fields] - list of atomic fields contained in filter
+/// [filters] - list of sub-filters
 class DaktelaFilter {
   final String logic;
   final List<DaktelaFilterField>? fields;
   final List<DaktelaFilter>? filters;
 
-  DaktelaFilter({required this.logic, this.fields, this.filters});
+  DaktelaFilter({this.logic = 'and', this.fields, this.filters});
 
+  /// Creates simple [DaktelaFilter] that contains only one [DaktelaFilterField]
   factory DaktelaFilter.simple(DaktelaFilterField field) => DaktelaFilter(logic: 'and', fields: [field]);
 
   factory DaktelaFilter.fromJson(dynamic json) {
@@ -36,6 +41,11 @@ class DaktelaFilter {
   }
 }
 
+/// Atomic part of Daktela's filter.
+/// [field] - name of field
+/// [operator] - filter operator
+/// [value] - expected value
+/// [ignoreCase] - optional flag for case sensitive filtering
 class DaktelaFilterField {
   final String field;
   final String operator;

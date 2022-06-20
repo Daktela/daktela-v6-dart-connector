@@ -1,8 +1,11 @@
+/// Allows to sort records by list of fields ([DaktelaSortField])
+/// [fields] - list of atomic sorts contained in filter
 class DaktelaSort {
   final List<DaktelaSortField> fields;
 
   DaktelaSort({required this.fields});
 
+  /// Creates simple [DaktelaSort] that contains only one [DaktelaSortField]
   factory DaktelaSort.simple(DaktelaSortField field) => DaktelaSort(fields: [field]);
 
   factory DaktelaSort.fromJson(dynamic json) {
@@ -18,6 +21,9 @@ class DaktelaSort {
   }
 }
 
+/// Atomic part of Daktela's sort.
+/// [field] - name of field
+/// [direction] - sort direction
 class DaktelaSortField {
   final String field;
   final String direction;

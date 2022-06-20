@@ -6,7 +6,6 @@ import 'package:daktela_connector/src/daktela_logger.dart';
 import 'package:http/http.dart' as http;
 
 class DaktelaConnector {
-  static const daktelaSuffix = '.daktela.com';
   static const _apiPrefix = 'api/v6/';
   static const _internalPrefix = 'internal/';
 
@@ -15,15 +14,17 @@ class DaktelaConnector {
   late DaktelaConnectorConfig _config;
   final _defaultErrors = DaktelaErrorMessages();
 
-  set config(DaktelaConnectorConfig config) {
-    _config = config;
-  }
-
   DaktelaConnector._();
 
+  /// instance getter
   static DaktelaConnector get instance => _instance ??= DaktelaConnector._();
 
   DaktelaErrorMessages get _errors => _config.errors ?? _defaultErrors;
+
+  /// config setter
+  set config(DaktelaConnectorConfig config) {
+    _config = config;
+  }
 
   Map<String, String> _prepareHeaders({Map<String, String>? headers}) {
     headers ??= {};
@@ -46,6 +47,12 @@ class DaktelaConnector {
 
   Map<String, String> get _contentTypeJson => {'Content-Type': 'application/json'};
 
+  /// HTTP GET method
+  /// [endpoint] - name of endpoint
+  /// [queryParameters] - map of query parameters (we recommend you to use [DaktelaQueryMap] to build request's query)
+  /// [nestedDecoding] - flag for response decoding (default is true for standard response decoding)
+  /// [internalEndpoint] - flag for use `/internal` endpoint prefix instead of standard `/api/v6` (default is false)
+  /// [longPollingRequest] - flag for use long polling request timeout (default is false).
   Future<DaktelaResponse> get(String endpoint, {Map<String, dynamic>? queryParameters, bool nestedDecoding = true, bool internalEndpoint = false, bool longPollingRequest = false}) async {
     Map<String, String> headers = _prepareHeaders();
     _logRequest('GET', endpoint, null, queryParameters, headers);
@@ -59,6 +66,11 @@ class DaktelaConnector {
     }
   }
 
+  /// HTTP POST method
+  /// [endpoint] - name of endpoint
+  /// [payload] - map of payload
+  /// [queryParameters] - map of query parameters (we recommend you to use [DaktelaQueryMap] to build request's query)
+  /// [nestedDecoding] - flag for response decoding (default is true for standard response decoding)
   Future<DaktelaResponse> post(String endpoint, {Map<String, dynamic>? payload, Map<String, dynamic>? queryParameters, bool nestedDecoding = true}) async {
     Map<String, String> headers = _prepareHeaders(headers: _contentTypeJson);
     _logRequest('POST', endpoint, payload, queryParameters, headers);
@@ -71,6 +83,11 @@ class DaktelaConnector {
     }
   }
 
+  /// HTTP PUT method
+  /// [endpoint] - name of endpoint
+  /// [payload] - map of payload
+  /// [queryParameters] - map of query parameters (we recommend you to use [DaktelaQueryMap] to build request's query)
+  /// [nestedDecoding] - flag for response decoding (default is true for standard response decoding)
   Future<DaktelaResponse> put(String endpoint, {Map<String, dynamic>? payload, Map<String, dynamic>? queryParameters, bool nestedDecoding = true}) async {
     Map<String, String> headers = _prepareHeaders(headers: _contentTypeJson);
     _logRequest('PUT', endpoint, payload, queryParameters, headers);
@@ -83,6 +100,10 @@ class DaktelaConnector {
     }
   }
 
+  /// HTTP PUT method
+  /// [endpoint] - name of endpoint
+  /// [queryParameters] - map of query parameters (we recommend you to use [DaktelaQueryMap] to build request's query)
+  /// [nestedDecoding] - flag for response decoding (default is true for standard response decoding)
   Future<DaktelaResponse> delete(String endpoint, {Map<String, dynamic>? queryParameters, bool nestedDecoding = true}) async {
     Map<String, String> headers = _prepareHeaders();
     _logRequest('DELETE', endpoint, null, queryParameters, headers);
@@ -189,26 +210,35 @@ class DaktelaConnector {
   }
 }
 
+/// Error response from server
+/// [statusCode] of response,
+/// error [message].
 class DaktelaException implements Exception {
   final int statusCode;
-  final String _message;
+  final String message;
 
-  DaktelaException(this.statusCode, this._message);
+  DaktelaException(this.statusCode, this.message);
 
   @override
   String toString() {
-    return _message;
+    return message;
   }
 }
 
+/// Thrown in case of invalid credentials
 class DaktelaUnauthorizedException extends DaktelaException {
   DaktelaUnauthorizedException(String message) : super(401, message);
 }
 
+/// Thrown in case of invalid credentials
 class DaktelaNotFoundException extends DaktelaException {
   DaktelaNotFoundException(String message) : super(404, message);
 }
 
+/// Standard response from server
+/// [statusCode] of response,
+/// [result] contains returned data,
+/// [total] is total number of records (in case this number is contained in response).
 class DaktelaResponse {
   final int statusCode;
   final dynamic result;

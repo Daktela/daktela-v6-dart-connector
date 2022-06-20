@@ -1,5 +1,11 @@
+import 'package:daktela_connector/daktela_connector.dart';
+
+/// Enumerator defining logger verbosity
 enum DaktelaLogLevel { off, minimal, verbose }
 
+/// Configuration of [DaktelaLogger] used in [DaktelaConnector]
+/// [callback] is a method that is called during processing HTTP requests. In all the cases it provides [message] and in more specific cases (such as errors) are [error] and [stackTrace] also provided. In this method you are allowed to set up custom logging strategy.
+/// [level] defines logger verbosity.
 class DaktelaLogger {
   final Function(String message, {Object? error, StackTrace? stackTrace}) callback;
   final DaktelaLogLevel level;

@@ -2,6 +2,7 @@ import 'package:daktela_connector/src/queries/daktela_filter.dart';
 import 'package:daktela_connector/src/queries/daktela_pagination.dart';
 import 'package:daktela_connector/src/queries/daktela_sort.dart';
 
+/// Extension of Map<String, dynamic> that allows to create Daktela API query map
 extension DaktelaQueryMap on Map<String, dynamic> {
   void _enrichWithFilter(DaktelaFilter filter) {
     this['filter[logic]'] = filter.logic;
@@ -68,6 +69,12 @@ extension DaktelaQueryMap on Map<String, dynamic> {
     });
   }
 
+  /// Builds query map for HTTP requests
+  /// [filter] instance of [DaktelaFilter]
+  /// [sort] instance of [DaktelaSort]
+  /// [pagination] instance of [DaktelaPagination]
+  /// [search] adds 'q' parameter with given value to the map (typically used with endpoints that support full text search)
+  /// [fields] only fields with given name will be returned
   static Map<String, dynamic> build({DaktelaFilter? filter, DaktelaSort? sort, DaktelaPagination? pagination, String? search, List<String>? fields}) {
     Map<String, dynamic> map = {};
     if (filter != null) {
