@@ -1,4 +1,4 @@
-import 'package:daktela_connector/src/queries/daktela_filter.dart';
+import 'package:daktela_connector/daktela_connector.dart';
 import 'package:test/test.dart';
 
 void main() {
