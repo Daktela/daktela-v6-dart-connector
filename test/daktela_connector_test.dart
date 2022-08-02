@@ -1,5 +1,4 @@
 import 'package:daktela_connector/daktela_connector.dart';
-import 'package:daktela_connector/src/daktela_connector_config.dart';
 import 'package:dotenv/dotenv.dart';
 import 'package:test/test.dart';
 

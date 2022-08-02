@@ -1,4 +1,4 @@
-import 'package:daktela_connector/src/queries/daktela_filter.dart';
+import 'package:daktela_connector/daktela_connector.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -70,6 +70,18 @@ void _parseTest() {
   expect(f.operator, 'neq');
   expect(f.value, ['noname']);
   expect(f.ignoreCase, true);
+
+  f = DaktelaFilterField.fromJson({'field': 'bla', 'operator': 'neq', 'value': null});
+  expect(f.field, 'bla');
+  expect(f.operator, 'neq');
+  expect(f.value, null);
+  expect(f.ignoreCase, false);
+
+  f = DaktelaFilterField.fromJson({'field': 'bla', 'operator': 'neq', 'value': 11});
+  expect(f.field, 'bla');
+  expect(f.operator, 'neq');
+  expect(f.value, ['11']);
+  expect(f.ignoreCase, false);
 
   var filter = DaktelaFilter.fromJson({'field': 'firstname', 'operator': 'eq', 'value': 'John'});
   expect(filter.logic, 'and');
