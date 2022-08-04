@@ -59,7 +59,7 @@ class DaktelaFilterField {
     return DaktelaFilterField(
       field: json['field'],
       operator: json['operator'] ?? '',
-      value: json['value'] != null ? (json['value'] is List ? (json['value'] as List).map((e) => '$e').where((e) => e.isEmpty).toList() : ['${json['value']}']) : null,
+      value: json['value'] != null ? (json['value'] is List ? (json['value'] as List).map((e) => '$e').where((e) => e.isNotEmpty).toList() : ['${json['value']}']) : null,
       ignoreCase: ignoreCase == 'true' || ignoreCase == '1',
     );
   }
