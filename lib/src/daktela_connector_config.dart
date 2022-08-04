@@ -26,7 +26,7 @@ class DaktelaConnectorConfig {
     required this.url,
     this.accessToken = '',
     this.timeout = const Duration(seconds: 10),
-    this.longPollingTimeout = const Duration(seconds: 10),
+    this.longPollingTimeout = const Duration(seconds: 30),
     this.userAgent = '',
     this.cookieAuth = false,
     this.logger,
