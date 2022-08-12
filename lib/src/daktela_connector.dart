@@ -71,11 +71,11 @@ class DaktelaConnector {
   /// [payload] - map of payload
   /// [queryParameters] - map of query parameters (we recommend you to use [DaktelaQueryMap] to build request's query)
   /// [nestedDecoding] - flag for response decoding (default is true for standard response decoding)
-  Future<DaktelaResponse> post(String endpoint, {Map<String, dynamic>? payload, Map<String, dynamic>? queryParameters, bool nestedDecoding = true}) async {
+  Future<DaktelaResponse> post(String endpoint, {Map<String, dynamic>? payload, Map<String, dynamic>? queryParameters, bool nestedDecoding = true, bool internalEndpoint = false}) async {
     Map<String, String> headers = prepareHeaders(headers: _contentTypeJson);
     logRequest('POST', endpoint, payload, queryParameters, headers);
     try {
-      http.Response response = await http.post(_buildUri(endpoint, queryParameters), body: jsonEncode(payload), headers: headers).timeout(_config.timeout);
+      http.Response response = await http.post(_buildUri(endpoint, queryParameters, internal: internalEndpoint), body: jsonEncode(payload), headers: headers).timeout(_config.timeout);
       return _parseResponse(response, nestedDecoding);
     } on TimeoutException catch (e, st) {
       _config.logger?.log('Timeout', error: e, stackTrace: st);
@@ -88,11 +88,11 @@ class DaktelaConnector {
   /// [payload] - map of payload
   /// [queryParameters] - map of query parameters (we recommend you to use [DaktelaQueryMap] to build request's query)
   /// [nestedDecoding] - flag for response decoding (default is true for standard response decoding)
-  Future<DaktelaResponse> put(String endpoint, {Map<String, dynamic>? payload, Map<String, dynamic>? queryParameters, bool nestedDecoding = true}) async {
+  Future<DaktelaResponse> put(String endpoint, {Map<String, dynamic>? payload, Map<String, dynamic>? queryParameters, bool nestedDecoding = true, bool internalEndpoint = false}) async {
     Map<String, String> headers = prepareHeaders(headers: _contentTypeJson);
     logRequest('PUT', endpoint, payload, queryParameters, headers);
     try {
-      http.Response response = await http.put(_buildUri(endpoint, queryParameters), body: jsonEncode(payload), headers: headers).timeout(_config.timeout);
+      http.Response response = await http.put(_buildUri(endpoint, queryParameters, internal: internalEndpoint), body: jsonEncode(payload), headers: headers).timeout(_config.timeout);
       return _parseResponse(response, nestedDecoding);
     } on TimeoutException catch (e, st) {
       _config.logger?.log('Timeout', error: e, stackTrace: st);
@@ -104,11 +104,11 @@ class DaktelaConnector {
   /// [endpoint] - name of endpoint
   /// [queryParameters] - map of query parameters (we recommend you to use [DaktelaQueryMap] to build request's query)
   /// [nestedDecoding] - flag for response decoding (default is true for standard response decoding)
-  Future<DaktelaResponse> delete(String endpoint, {Map<String, dynamic>? queryParameters, bool nestedDecoding = true}) async {
+  Future<DaktelaResponse> delete(String endpoint, {Map<String, dynamic>? queryParameters, bool nestedDecoding = true, bool internalEndpoint = false}) async {
     Map<String, String> headers = prepareHeaders();
     logRequest('DELETE', endpoint, null, queryParameters, headers);
     try {
-      http.Response response = await http.delete(_buildUri(endpoint, queryParameters), headers: headers).timeout(_config.timeout);
+      http.Response response = await http.delete(_buildUri(endpoint, queryParameters, internal: internalEndpoint), headers: headers).timeout(_config.timeout);
       if (response.statusCode == 204) {
         return DaktelaResponse(response.statusCode, null, null);
       }
