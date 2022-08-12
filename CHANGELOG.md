@@ -1,3 +1,6 @@
+# 1.0.4
+Add internal endpoint option to all supported HTTP methods.
+
 # 1.0.3
 Bug fix.
 
