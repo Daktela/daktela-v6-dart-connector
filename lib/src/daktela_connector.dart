@@ -239,7 +239,8 @@ class DaktelaNotFoundException extends DaktelaException {
 /// Standard response from server
 /// [statusCode] of response,
 /// [result] contains returned data,
-/// [total] is total number of records (in case this number is contained in response).
+/// [total] is total number of records (in case this number is contained in response),
+/// [time] is DateTime returned in response.
 class DaktelaResponse {
   final int statusCode;
   final dynamic result;

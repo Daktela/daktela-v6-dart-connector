@@ -1,3 +1,6 @@
+# 1.0.5
+Add time property into DaktelaResponse.
+
 # 1.0.4
 Add internal endpoint option to all supported HTTP methods.
 
