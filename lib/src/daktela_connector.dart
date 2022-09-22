@@ -153,7 +153,7 @@ class DaktelaConnector {
           result = result['data'];
         }
       }
-      return DaktelaResponse(response.statusCode, result, total, time: time);
+      return DaktelaResponse(response.statusCode, result, total, time: DateTime.tryParse(time));
     } else if (response.statusCode == 401) {
       throw DaktelaUnauthorizedException(_config.errors?.unauthorized ?? '');
     } else if (response.statusCode == 404) {
@@ -244,7 +244,7 @@ class DaktelaResponse {
   final int statusCode;
   final dynamic result;
   final int? total;
-  final String? time;
+  final DateTime? time;
 
   DaktelaResponse(this.statusCode, this.result, this.total, {this.time});
 }

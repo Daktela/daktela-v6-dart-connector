@@ -84,7 +84,7 @@ void main() {
       expect(response.statusCode, 200);
       expect(response.result, isA<Map<String, dynamic>>());
       var data = response.result as Map<String, dynamic>;
-      expect(response.time, isA<String>());
+      expect(response.time, isA<DateTime>());
       expect(data['name'], 'test_create_$currentDateTime');
     });
 
