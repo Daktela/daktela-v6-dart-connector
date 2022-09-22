@@ -145,6 +145,7 @@ class DaktelaConnector {
     logResponse(response.statusCode, response.request?.url.toString() ?? '', body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       dynamic result = body['result'];
+      String time = body['_time'];
       int? total;
       if (nestedDecoding && result is Map<String, dynamic>) {
         total = result['total'];
@@ -152,7 +153,7 @@ class DaktelaConnector {
           result = result['data'];
         }
       }
-      return DaktelaResponse(response.statusCode, result, total);
+      return DaktelaResponse(response.statusCode, result, total, time: DateTime.tryParse(time));
     } else if (response.statusCode == 401) {
       throw DaktelaUnauthorizedException(_config.errors?.unauthorized ?? '');
     } else if (response.statusCode == 404) {
@@ -238,11 +239,13 @@ class DaktelaNotFoundException extends DaktelaException {
 /// Standard response from server
 /// [statusCode] of response,
 /// [result] contains returned data,
-/// [total] is total number of records (in case this number is contained in response).
+/// [total] is total number of records (in case this number is contained in response),
+/// [time] is DateTime returned in response.
 class DaktelaResponse {
   final int statusCode;
   final dynamic result;
   final int? total;
+  final DateTime? time;
 
-  DaktelaResponse(this.statusCode, this.result, this.total);
+  DaktelaResponse(this.statusCode, this.result, this.total, {this.time});
 }
