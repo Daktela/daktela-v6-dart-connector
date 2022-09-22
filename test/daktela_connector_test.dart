@@ -7,7 +7,6 @@ void main() {
 
   late String instance;
   late String accessToken;
-  late String queueName;
   late DaktelaConnector connector;
 
   setUp(() {
@@ -17,7 +16,6 @@ void main() {
     }
     instance = env['instance'] ?? '';
     accessToken = env['accessToken'] ?? '';
-    queueName = env['queue'] ?? '';
     connector = DaktelaConnector.instance
       ..config = DaktelaConnectorConfig(
         url: instance,
@@ -71,53 +69,48 @@ void main() {
     test('POST request test', () async {
       var payload = {
         'name': 'test_create_$currentDateTime',
-        'number': '+420111222333',
-        'action': 5,
-        'queue': queueName,
+        'title': 'test_create_$currentDateTime',
       };
-      var response = await connector.post('campaignsRecords.json', payload: payload);
+      var response = await connector.post('statuses.json', payload: payload);
       expect(response.statusCode, 201);
       expect(response.result, isA<Map<String, dynamic>>());
       var data = response.result as Map<String, dynamic>;
       expect(data['name'], payload['name']);
-      expect(data['number'], payload['number']);
-      expect(data['action'], '${payload['action']}');
-      expect('${data['record_type']['name']}', payload['queue']);
       print('POST done');
     });
 
     test('GET request test', () async {
-      var response = await connector.get('campaignsRecords/test_create_$currentDateTime.json');
+      var response = await connector.get('statuses/test_create_$currentDateTime.json');
       expect(response.statusCode, 200);
       expect(response.result, isA<Map<String, dynamic>>());
       var data = response.result as Map<String, dynamic>;
+      expect(response.time, isA<String>());
       expect(data['name'], 'test_create_$currentDateTime');
     });
 
     test('GET all request test', () async {
-      var map = DaktelaQueryMap.build(filter: DaktelaFilter.simple(DaktelaFilterField(field: 'name', operator: 'eq', value: ['test_create_$currentDateTime'])), fields: ['name', 'number']);
-      var response = await connector.get('campaignsRecords.json', queryParameters: map);
+      var map = DaktelaQueryMap.build(filter: DaktelaFilter.simple(DaktelaFilterField(field: 'name', operator: 'eq', value: ['test_create_$currentDateTime'])));
+      var response = await connector.get('statuses.json', queryParameters: map);
       expect(response.statusCode, 200);
       expect(response.result, isA<List>());
       var data = response.result as List<dynamic>;
       expect(data.length, 1);
       expect(data[0], isA<Map<String, dynamic>>());
       var object = data[0] as Map<String, dynamic>;
-      expect(object.length, 2);
+      expect(object.length, 9);
       expect(object['name'], 'test_create_$currentDateTime');
-      expect(object['number'], '+420111222333');
     });
 
     test('PUT request test', () async {
-      var response = await connector.put('campaignsRecords/test_create_$currentDateTime.json', payload: {'number': '987654321'});
+      var response = await connector.put('statuses/test_create_$currentDateTime.json', payload: {'description': 'test'});
       expect(response.statusCode, 200);
       expect(response.result, isA<Map<String, dynamic>>());
       var data = response.result as Map<String, dynamic>;
-      expect(data['number'], '987654321');
+      expect(data['description'], 'test');
     });
 
     test('DELETE request test', () async {
-      var response = await connector.delete('campaignsRecords/test_create_$currentDateTime.json');
+      var response = await connector.delete('statuses/test_create_$currentDateTime.json');
       expect(response.statusCode, 204);
       expect(response.result, isNull);
     });

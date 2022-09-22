@@ -145,6 +145,7 @@ class DaktelaConnector {
     _logResponse(response.statusCode, response.request?.url.toString() ?? '', body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       dynamic result = body['result'];
+      String time = body['_time'];
       int? total;
       if (nestedDecoding && result is Map<String, dynamic>) {
         total = result['total'];
@@ -152,7 +153,7 @@ class DaktelaConnector {
           result = result['data'];
         }
       }
-      return DaktelaResponse(response.statusCode, result, total);
+      return DaktelaResponse(response.statusCode, result, total, time: time);
     } else if (response.statusCode == 401) {
       throw DaktelaUnauthorizedException(_config.errors?.unauthorized ?? '');
     } else if (response.statusCode == 404) {
@@ -243,6 +244,7 @@ class DaktelaResponse {
   final int statusCode;
   final dynamic result;
   final int? total;
+  final String? time;
 
-  DaktelaResponse(this.statusCode, this.result, this.total);
+  DaktelaResponse(this.statusCode, this.result, this.total, {this.time});
 }
