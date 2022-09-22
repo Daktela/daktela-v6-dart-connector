@@ -152,4 +152,51 @@ void _parseTest() {
   expect(f.field, 'lastname');
   expect(f.operator, 'eq');
   expect(f.value, ['Smith']);
+
+  json = {
+    'logic': 'and',
+    'filters': [
+      {'field': 'user', 'value': '_LOGGED', 'operator': 'eq'},
+      {
+        'logic': 'or',
+        'filters': [
+          {
+            'field': 'stage',
+            'value': ['OPEN', 'WAIT'],
+            'operator': 'in'
+          },
+          {
+            'field': 'stage',
+            'value': ['CLOSE'],
+            'operator': 'in'
+          }
+        ]
+      }
+    ]
+  };
+
+  filter = DaktelaFilter.fromJson(json);
+  expect(filter.logic, 'and');
+
+  expect(filter.fields?.length, 1);
+  f = filter.fields!.first;
+  expect(f.field, 'user');
+  expect(f.operator, 'eq');
+  expect(f.value, ['_LOGGED']);
+
+  expect(filter.filters?.length, 1);
+  filter = filter.filters!.first;
+  expect(filter.logic, 'or');
+  expect(filter.filters, isEmpty);
+  expect(filter.fields?.length, 2);
+
+  f = filter.fields!.first;
+  expect(f.field, 'stage');
+  expect(f.operator, 'in');
+  expect(f.value, ['OPEN', 'WAIT']);
+
+  f = filter.fields![1];
+  expect(f.field, 'stage');
+  expect(f.operator, 'in');
+  expect(f.value, ['CLOSE']);
 }
