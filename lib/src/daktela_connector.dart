@@ -21,6 +21,9 @@ class DaktelaConnector {
 
   DaktelaErrorMessages get _errors => _config.errors ?? _defaultErrors;
 
+  ///config getter
+  DaktelaConnectorConfig get config => _config;
+
   /// config setter
   set config(DaktelaConnectorConfig config) {
     _config = config;
@@ -54,7 +57,7 @@ class DaktelaConnector {
   /// [internalEndpoint] - flag for use `/internal` endpoint prefix instead of standard `/api/v6` (default is false)
   /// [longPollingRequest] - flag for use long polling request timeout (default is false).
   Future<DaktelaResponse> get(String endpoint, {Map<String, dynamic>? queryParameters, bool nestedDecoding = true, bool internalEndpoint = false, bool longPollingRequest = false}) async {
-    Map<String, String> headers = prepareHeaders();
+    Map<String, String> headers = prepareHeaders(headers: _contentTypeJson);
     logRequest('GET', endpoint, null, queryParameters, headers);
     try {
       http.Response response =
