@@ -21,6 +21,9 @@ class DaktelaConnector {
 
   DaktelaErrorMessages get _errors => _config.errors ?? _defaultErrors;
 
+  ///config getter
+  DaktelaConnectorConfig get config => _config;
+
   /// config setter
   set config(DaktelaConnectorConfig config) {
     _config = config;

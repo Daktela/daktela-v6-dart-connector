@@ -115,4 +115,8 @@ void main() {
       expect(response.result, isNull);
     });
   });
+  test('Config test', () async {
+    var connector = DaktelaConnector.instance..config = DaktelaConnectorConfig(url: instance);
+    expect(connector.config.url, instance);
+  });
 }
