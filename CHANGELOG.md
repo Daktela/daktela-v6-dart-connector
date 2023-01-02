@@ -1,3 +1,6 @@
+# 1.0.6
+Add current DaktelaConnector config getter
+
 # 1.0.5
 Add time property into DaktelaResponse.
 
