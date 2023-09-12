@@ -1,3 +1,6 @@
+# 1.0.7
+Bumped up http package version
+
 # 1.0.6
 Add current DaktelaConnector config getter
 
