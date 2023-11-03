@@ -149,7 +149,7 @@ class DaktelaConnector {
     if (response.statusCode == 200 || response.statusCode == 201) {
       dynamic result = body['result'];
       String time = body['_time'];
-      int? total;
+      int? total = body['total'] is int ? body['total'] : null;
       if (nestedDecoding && result is Map<String, dynamic>) {
         total = result['total'];
         if (result['data'] != null) {
