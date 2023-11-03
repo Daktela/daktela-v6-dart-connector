@@ -1,6 +1,6 @@
 name: daktela_connector
 description: Daktela Connector is SDK by Daktela s.r.o. for Dart/Flutter apps that allows you communicate with standard Daktela V6 REST API.
-version: 1.0.7
+version: 1.0.8
 homepage: https://www.daktela.com/integrace/
 repository: https://github.com/Daktela/daktela-v6-dart-connector
 issue_tracker: https://github.com/Daktela/daktela-v6-dart-connector/issues
