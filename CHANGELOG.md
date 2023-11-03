@@ -1,3 +1,6 @@
+# 1.0.8
+Fixed DaktelaResponse total property for various responses
+
 # 1.0.7
 Bumped up http package version
 
