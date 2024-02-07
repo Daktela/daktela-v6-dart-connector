@@ -114,6 +114,16 @@ void main() {
       expect(response.statusCode, 204);
       expect(response.result, isNull);
     });
+    test('Headers test', () async {
+      var config = connector.config;
+      connector.config = DaktelaConnectorConfig(url: config.url, accessToken: config.accessToken, cookieAuth: true);
+      var response = await connector.put('userprofile.json',
+          internalEndpoint: true, payload: {'algo': null, 'alias': '', 'timezone': 'Europe/Prague', 'title': 'Atext TEST', 'email': null, 'emoji': '', 'name': 'api_test3212'});
+      expect(response.statusCode, 200);
+      expect(response.result, isA<Map<String, dynamic>>());
+      print(response.headers);
+      expect(response.headers['set-cookie'], isNotNull);
+    });
   });
   test('Config test', () async {
     var connector = DaktelaConnector.instance..config = DaktelaConnectorConfig(url: instance);
