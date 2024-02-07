@@ -156,7 +156,7 @@ class DaktelaConnector {
           result = result['data'];
         }
       }
-      return DaktelaResponse(response.statusCode, result, total, time: DateTime.tryParse(time));
+      return DaktelaResponse(response.statusCode, result, total, time: DateTime.tryParse(time), headers: response.headers);
     } else if (response.statusCode == 401) {
       throw DaktelaUnauthorizedException(_config.errors?.unauthorized ?? '');
     } else if (response.statusCode == 404) {
@@ -244,11 +244,13 @@ class DaktelaNotFoundException extends DaktelaException {
 /// [result] contains returned data,
 /// [total] is total number of records (in case this number is contained in response),
 /// [time] is DateTime returned in response.
+/// [headers] of response
 class DaktelaResponse {
   final int statusCode;
   final dynamic result;
   final int? total;
   final DateTime? time;
+  final Map<String, String> headers;
 
-  DaktelaResponse(this.statusCode, this.result, this.total, {this.time});
+  DaktelaResponse(this.statusCode, this.result, this.total, {this.time, this.headers = const {}});
 }
