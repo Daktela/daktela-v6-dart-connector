@@ -1,7 +1,6 @@
 # Daktela V6 Dart Connector
 
-Daktela V6 Dart Connector is a library that enables your Dart/Flutter application to connect to your Daktela V6 REST API.
-Complete documentation of Daktela API is available on following link: https://customer.daktela.com/apihelp/v6/global/general-information. 
+Daktela V6 Dart Connector is a library that enables your Dart/Flutter application to connect to your [Daktela V6 REST API](https://customer.daktela.com/apihelp/v6/global/general-information). This connector requires you to have the [Daktela Contact Centre](https://daktela.com/) application already purchased, installed, and ready for use. The Daktela Contact Centre is an application enabling all-in-one handling of all customer communication coming through various channels, for example calls, e-mails, web chats, SMS, or social media.
 
 ## Setup
 

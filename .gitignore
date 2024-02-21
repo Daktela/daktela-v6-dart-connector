@@ -4,3 +4,5 @@ pubspec.lock
 *.iml
 .packages
 .history
+.dart_tool
+doc
