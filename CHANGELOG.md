@@ -1,3 +1,7 @@
+# 1.0.11
+
+Add Accept-Language header.
+
 # 1.0.10
 
 Update README.md
