@@ -7,6 +7,7 @@ import 'package:daktela_connector/src/daktela_logger.dart';
 /// [longPollingTimeout] - in case you implement your custom app pull data worker, you are allowed to set long polling requests timeout
 /// [userAgent] - your app user agent
 /// [cookieAuth]` - allows you to authenticate request through cookies (default value is false and in that case access token will be added into request's query parameters)
+/// [acceptLanguage]` - Accept-Language header value
 /// [logger] - instance of [DaktelaLogger]
 /// [errors] - instance of [DaktelaErrorMessages]
 class DaktelaConnectorConfig {
@@ -18,6 +19,7 @@ class DaktelaConnectorConfig {
 
   final String userAgent;
   final bool cookieAuth;
+  final String acceptLanguage;
 
   final DaktelaLogger? logger;
   final DaktelaErrorMessages? errors;
@@ -29,6 +31,7 @@ class DaktelaConnectorConfig {
     this.longPollingTimeout = const Duration(seconds: 30),
     this.userAgent = '',
     this.cookieAuth = false,
+    this.acceptLanguage = '',
     this.logger,
     this.errors,
   });

@@ -37,6 +37,9 @@ class DaktelaConnector {
     if (_config.accessToken.isNotEmpty && _config.cookieAuth) {
       headers['Cookie'] = 'c_user=${_config.accessToken}';
     }
+    if (_config.acceptLanguage.isNotEmpty) {
+      headers['Accept-Language'] = _config.acceptLanguage;
+    }
     return headers;
   }
 

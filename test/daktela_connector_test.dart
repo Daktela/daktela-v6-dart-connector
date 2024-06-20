@@ -116,13 +116,16 @@ void main() {
     });
     test('Headers test', () async {
       var config = connector.config;
-      connector.config = DaktelaConnectorConfig(url: config.url, accessToken: config.accessToken, cookieAuth: true);
-      var response = await connector.put('userprofile.json',
-          internalEndpoint: true, payload: {'algo': null, 'alias': '', 'timezone': 'Europe/Prague', 'title': 'Atext TEST', 'email': null, 'emoji': '', 'name': 'api_test3212'});
+      var lang = 'de_DE';
+      connector.config = DaktelaConnectorConfig(url: config.url, accessToken: config.accessToken, cookieAuth: true, acceptLanguage: lang);
+      var response = await connector.get('whoim.json');
       expect(response.statusCode, 200);
       expect(response.result, isA<Map<String, dynamic>>());
+      expect(response.result['user'], isNotNull); // i.e. access token is set
       print(response.headers);
-      expect(response.headers['set-cookie'], isNotNull);
+      var cookies = response.headers['set-cookie'];
+      expect(cookies, isNotNull);
+      expect(cookies!.contains('lang=$lang'), true);
     });
   });
   test('Config test', () async {
