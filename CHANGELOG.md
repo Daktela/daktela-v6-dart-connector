@@ -1,3 +1,7 @@
+# 1.0.12
+
+Fixed parsing for boolean type errors
+
 # 1.0.11
 
 Add Accept-Language header.

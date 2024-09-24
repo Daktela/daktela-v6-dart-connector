@@ -65,7 +65,7 @@ class DaktelaConnector {
     try {
       http.Response response =
           await http.get(_buildUri(endpoint, queryParameters, internal: internalEndpoint), headers: headers).timeout(longPollingRequest ? _config.longPollingTimeout : _config.timeout);
-      return _parseResponse(response, nestedDecoding);
+      return parseResponse(response, nestedDecoding);
     } on TimeoutException catch (e, st) {
       _config.logger?.log('Timeout', error: e, stackTrace: st);
       throw DaktelaException(0, _errors.timeout);
@@ -82,7 +82,7 @@ class DaktelaConnector {
     logRequest('POST', endpoint, payload, queryParameters, headers);
     try {
       http.Response response = await http.post(_buildUri(endpoint, queryParameters, internal: internalEndpoint), body: jsonEncode(payload), headers: headers).timeout(_config.timeout);
-      return _parseResponse(response, nestedDecoding);
+      return parseResponse(response, nestedDecoding);
     } on TimeoutException catch (e, st) {
       _config.logger?.log('Timeout', error: e, stackTrace: st);
       throw DaktelaException(0, _errors.timeout);
@@ -99,7 +99,7 @@ class DaktelaConnector {
     logRequest('PUT', endpoint, payload, queryParameters, headers);
     try {
       http.Response response = await http.put(_buildUri(endpoint, queryParameters, internal: internalEndpoint), body: jsonEncode(payload), headers: headers).timeout(_config.timeout);
-      return _parseResponse(response, nestedDecoding);
+      return parseResponse(response, nestedDecoding);
     } on TimeoutException catch (e, st) {
       _config.logger?.log('Timeout', error: e, stackTrace: st);
       throw DaktelaException(0, _errors.timeout);
@@ -146,7 +146,7 @@ class DaktelaConnector {
     _config.logger?.log('->  Response: $body', logLevel: DaktelaLogLevel.verbose);
   }
 
-  DaktelaResponse _parseResponse(http.Response response, bool nestedDecoding) {
+  DaktelaResponse parseResponse(http.Response response, bool nestedDecoding) {
     Map<String, dynamic> body = response.body.isNotEmpty ? jsonDecode(response.body) : {};
     logResponse(response.statusCode, response.request?.url.toString() ?? '', body);
     if (response.statusCode == 200 || response.statusCode == 201) {
@@ -211,6 +211,8 @@ class DaktelaConnector {
         if (errorMessage != null) {
           errorMessages.add('$key: $errorMessage');
         }
+      } else {
+        errorMessages.add('$key: ${map[key].toString()}');
       }
     }
     return errorMessages.isNotEmpty ? errorMessages.join(', ') : null;
