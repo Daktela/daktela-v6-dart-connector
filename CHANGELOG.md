@@ -1,3 +1,7 @@
+# 1.0.13
+
+Fixed parsing for results with missing time
+
 # 1.0.12
 
 Fixed parsing for boolean type errors

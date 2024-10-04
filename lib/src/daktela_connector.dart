@@ -151,7 +151,7 @@ class DaktelaConnector {
     logResponse(response.statusCode, response.request?.url.toString() ?? '', body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       dynamic result = body['result'];
-      String time = body['_time'];
+      String time = body['_time'] ?? '';
       int? total = body['total'] is int ? body['total'] : null;
       if (nestedDecoding && result is Map<String, dynamic>) {
         total = result['total'];
