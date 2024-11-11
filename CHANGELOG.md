@@ -1,3 +1,7 @@
+# 1.0.14
+
+Added Cookie lang property
+
 # 1.0.13
 
 Fixed parsing for results with missing time

@@ -31,15 +31,20 @@ class DaktelaConnector {
 
   Map<String, String> prepareHeaders({Map<String, String>? headers}) {
     headers ??= {};
+    var cookie = '';
     if (_config.userAgent.isNotEmpty) {
       headers['User-Agent'] = _config.userAgent;
     }
     if (_config.accessToken.isNotEmpty && _config.cookieAuth) {
-      headers['Cookie'] = 'c_user=${_config.accessToken}';
+      cookie = 'c_user=${_config.accessToken}';
+    }
+    if (_config.acceptLanguage.isNotEmpty) {
+      cookie += '; lang=${config.acceptLanguage}';
     }
     if (_config.acceptLanguage.isNotEmpty) {
       headers['Accept-Language'] = _config.acceptLanguage;
     }
+    headers['Cookie'] = cookie;
     return headers;
   }
 
