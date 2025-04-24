@@ -22,6 +22,8 @@ Configuration for `DaktelaConnector` with options:
 * `longPollingTimeout` - in case you implement your custom app pull data worker, you are allowed to set long polling requests timeout (default: 30 seconds),
 * `userAgent` - your app user agent,
 * `cookieAuth` - allows you to authenticate request through cookies (default value is false and in that case access token will be added into request's query parameters),
+* `acceptLanguage` - Accept-Language header value
+* `clientTimeZone` - client time zone (IANA TZ format, e.g. 'Europe/Prague'). NOTE: time zone is client's time zone so it's applied for authorized requests only.
 * `logger` - instance of `DaktelaLogger` that allows you to implement custom logging method,
 * `errors` - instance of `DaktelaErrorMessages` for overriding default error messages defined by connector.
 
