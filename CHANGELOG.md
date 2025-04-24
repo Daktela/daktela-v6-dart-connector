@@ -1,3 +1,7 @@
+# 1.0.15
+
+Add client time zone header
+
 # 1.0.14
 
 Added Cookie lang property
