@@ -45,6 +45,9 @@ class DaktelaConnector {
       headers['Accept-Language'] = _config.acceptLanguage;
     }
     headers['Cookie'] = cookie;
+    if (_config.clientTimeZone.isNotEmpty) {
+      headers['x-timezone-client'] = _config.clientTimeZone;
+    }
     return headers;
   }
 
@@ -164,7 +167,7 @@ class DaktelaConnector {
           result = result['data'];
         }
       }
-      return DaktelaResponse(response.statusCode, result, total, time: DateTime.tryParse(time), headers: response.headers);
+      return DaktelaResponse(response.statusCode, result, total, time: DateTime.tryParse(time), timeZone: body['_timezone'], headers: response.headers);
     } else if (response.statusCode == 401) {
       throw DaktelaUnauthorizedException(_config.errors?.unauthorized ?? '');
     } else if (response.statusCode == 404) {
@@ -254,13 +257,15 @@ class DaktelaNotFoundException extends DaktelaException {
 /// [result] contains returned data,
 /// [total] is total number of records (in case this number is contained in response),
 /// [time] is DateTime returned in response.
+/// [timeZone] is time zone of [time].
 /// [headers] of response
 class DaktelaResponse {
   final int statusCode;
   final dynamic result;
   final int? total;
   final DateTime? time;
+  final String? timeZone;
   final Map<String, String> headers;
 
-  DaktelaResponse(this.statusCode, this.result, this.total, {this.time, this.headers = const {}});
+  DaktelaResponse(this.statusCode, this.result, this.total, {this.time, this.timeZone, this.headers = const {}});
 }

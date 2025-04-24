@@ -128,6 +128,19 @@ void main() {
       expect(cookies!.contains('lang=$lang'), true);
     });
   });
+  test('Test client time zone', () async {
+      var config = connector.config;
+      connector.config = DaktelaConnectorConfig(url: config.url, accessToken: config.accessToken);
+      var response = await connector.get('whoim.json');
+      // test default time zone
+      expect(response.timeZone, 'Europe/Prague');
+
+      var timezone = 'Europe/London';
+      connector.config = DaktelaConnectorConfig(url: config.url, accessToken: config.accessToken, clientTimeZone: timezone);
+      response = await connector.get('whoim.json');
+      print(response);
+      expect(response.timeZone, timezone);
+  });
   test('Config test', () async {
     var connector = DaktelaConnector.instance..config = DaktelaConnectorConfig(url: instance);
     expect(connector.config.url, instance);
