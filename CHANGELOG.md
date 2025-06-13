@@ -1,3 +1,7 @@
+# 1.0.16
+
+Add support for v32 new token logic
+
 # 1.0.15
 
 Add client time zone header

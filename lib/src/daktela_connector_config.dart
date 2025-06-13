@@ -11,9 +11,11 @@ import 'package:daktela_connector/src/daktela_logger.dart';
 /// [clientTimeZone] - client time zone (IANA TZ format, e.g. 'Europe/Prague'). NOTE: time zone is client's time zone so it's applied for authorized requests only.
 /// [logger] - instance of [DaktelaLogger]
 /// [errors] - instance of [DaktelaErrorMessages]
+/// [refreshToken] - new logic from v32 - tokens are updated through refresh token
 class DaktelaConnectorConfig {
   final String url;
   final String accessToken;
+  final String? refreshToken;
 
   final Duration timeout;
   final Duration longPollingTimeout;
@@ -36,8 +38,37 @@ class DaktelaConnectorConfig {
     this.acceptLanguage = '',
     this.clientTimeZone = '',
     this.logger,
+    this.refreshToken,
     this.errors,
   });
+
+  DaktelaConnectorConfig copyWith({
+    String? url,
+    String? accessToken,
+    String? refreshToken,
+    Duration? timeout,
+    Duration? longPollingTimeout,
+    String? userAgent,
+    bool? cookieAuth,
+    String? acceptLanguage,
+    String? clientTimeZone,
+    DaktelaLogger? logger,
+    DaktelaErrorMessages? errors,
+  }) {
+    return DaktelaConnectorConfig(
+      url: url ?? this.url,
+      accessToken: accessToken ?? this.accessToken,
+      refreshToken: refreshToken ?? this.refreshToken,
+      timeout: timeout ?? this.timeout,
+      longPollingTimeout: longPollingTimeout ?? this.longPollingTimeout,
+      userAgent: userAgent ?? this.userAgent,
+      cookieAuth: cookieAuth ?? this.cookieAuth,
+      acceptLanguage: acceptLanguage ?? this.acceptLanguage,
+      clientTimeZone: clientTimeZone ?? this.clientTimeZone,
+      logger: logger ?? this.logger,
+      errors: errors ?? this.errors,
+    );
+  }
 }
 
 /// Customization of errors produced by [DaktelaConnector]

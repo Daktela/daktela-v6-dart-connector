@@ -38,6 +38,9 @@ class DaktelaConnector {
     if (_config.accessToken.isNotEmpty && _config.cookieAuth) {
       cookie = 'c_user=${_config.accessToken}';
     }
+    if (_config.refreshToken != null) {
+      cookie += '; c_refresh_token=${_config.refreshToken}';
+    }
     if (_config.acceptLanguage.isNotEmpty) {
       cookie += '; lang=${config.acceptLanguage}';
     }
@@ -157,6 +160,33 @@ class DaktelaConnector {
   DaktelaResponse parseResponse(http.Response response, bool nestedDecoding) {
     Map<String, dynamic> body = response.body.isNotEmpty ? jsonDecode(response.body) : {};
     logResponse(response.statusCode, response.request?.url.toString() ?? '', body);
+    var setCookie = response.headers['set-cookie'];
+    if (setCookie != null) {
+      String? newAccessToken;
+      String? newRefreshToken;
+
+      var cookies = setCookie.split(',');
+
+      for (var raw in cookies) {
+        var trimmed = raw.trim();
+
+        if (trimmed.startsWith('c_user=')) {
+          var value = trimmed.split(';').first.split('=').skip(1).join('=');
+          newAccessToken = value;
+        } else if (trimmed.startsWith('c_refresh_token=')) {
+          var value = trimmed.split(';').first.split('=').skip(1).join('=');
+          newRefreshToken = value;
+        }
+      }
+
+      if (newAccessToken != null && newAccessToken != _config.accessToken || newRefreshToken != null && newRefreshToken != _config.refreshToken) {
+        _config = _config.copyWith(
+          accessToken: newAccessToken ?? _config.accessToken,
+          refreshToken: newRefreshToken ?? _config.refreshToken,
+        );
+      }
+    }
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       dynamic result = body['result'];
       String time = body['_time'] ?? '';
