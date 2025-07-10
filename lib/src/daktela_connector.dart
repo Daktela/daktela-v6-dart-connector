@@ -74,8 +74,9 @@ class DaktelaConnector {
     Map<String, String> headers = prepareHeaders();
     logRequest('GET', endpoint, null, queryParameters, headers);
     try {
+      var client = _config.httpClient ?? http.Client();
       http.Response response =
-          await http.get(_buildUri(endpoint, queryParameters, internal: internalEndpoint), headers: headers).timeout(longPollingRequest ? _config.longPollingTimeout : _config.timeout);
+          await client.get(_buildUri(endpoint, queryParameters, internal: internalEndpoint), headers: headers).timeout(longPollingRequest ? _config.longPollingTimeout : _config.timeout);
       return parseResponse(response, nestedDecoding);
     } on TimeoutException catch (e, st) {
       _config.logger?.log('Timeout', error: e, stackTrace: st);
@@ -92,7 +93,8 @@ class DaktelaConnector {
     Map<String, String> headers = prepareHeaders(headers: _contentTypeJson);
     logRequest('POST', endpoint, payload, queryParameters, headers);
     try {
-      http.Response response = await http.post(_buildUri(endpoint, queryParameters, internal: internalEndpoint), body: jsonEncode(payload), headers: headers).timeout(_config.timeout);
+      var client = _config.httpClient ?? http.Client();
+      http.Response response = await client.post(_buildUri(endpoint, queryParameters, internal: internalEndpoint), body: jsonEncode(payload), headers: headers).timeout(_config.timeout);
       return parseResponse(response, nestedDecoding);
     } on TimeoutException catch (e, st) {
       _config.logger?.log('Timeout', error: e, stackTrace: st);
@@ -109,7 +111,8 @@ class DaktelaConnector {
     Map<String, String> headers = prepareHeaders(headers: _contentTypeJson);
     logRequest('PUT', endpoint, payload, queryParameters, headers);
     try {
-      http.Response response = await http.put(_buildUri(endpoint, queryParameters, internal: internalEndpoint), body: jsonEncode(payload), headers: headers).timeout(_config.timeout);
+      var client = _config.httpClient ?? http.Client();
+      http.Response response = await client.put(_buildUri(endpoint, queryParameters, internal: internalEndpoint), body: jsonEncode(payload), headers: headers).timeout(_config.timeout);
       return parseResponse(response, nestedDecoding);
     } on TimeoutException catch (e, st) {
       _config.logger?.log('Timeout', error: e, stackTrace: st);
@@ -125,7 +128,8 @@ class DaktelaConnector {
     Map<String, String> headers = prepareHeaders();
     logRequest('DELETE', endpoint, null, queryParameters, headers);
     try {
-      http.Response response = await http.delete(_buildUri(endpoint, queryParameters, internal: internalEndpoint), headers: headers).timeout(_config.timeout);
+      var client = _config.httpClient ?? http.Client();
+      http.Response response = await client.delete(_buildUri(endpoint, queryParameters, internal: internalEndpoint), headers: headers).timeout(_config.timeout);
       if (response.statusCode == 204) {
         return DaktelaResponse(response.statusCode, null, null);
       }

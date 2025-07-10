@@ -1,3 +1,7 @@
+# 1.0.17
+
+Allow custom http client
+
 # 1.0.16
 
 Add support for v32 new token logic

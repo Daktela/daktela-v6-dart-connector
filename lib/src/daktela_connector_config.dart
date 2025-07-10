@@ -1,4 +1,5 @@
 import 'package:daktela_connector/src/daktela_logger.dart';
+import 'package:http/http.dart' as http;
 
 /// Configuration used in [DaktelaConnector]
 /// [url] - URL of Daktela instance
@@ -22,6 +23,7 @@ class DaktelaConnectorConfig {
 
   final String userAgent;
   final bool cookieAuth;
+  final http.Client? httpClient;
   final String acceptLanguage;
   final String clientTimeZone;
 
@@ -31,6 +33,7 @@ class DaktelaConnectorConfig {
   DaktelaConnectorConfig({
     required this.url,
     this.accessToken = '',
+    this.httpClient,
     this.timeout = const Duration(seconds: 10),
     this.longPollingTimeout = const Duration(seconds: 30),
     this.userAgent = '',
