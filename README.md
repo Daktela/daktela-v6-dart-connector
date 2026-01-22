@@ -21,7 +21,11 @@ Configuration for `DaktelaConnector` with options:
 * `timeout` - request timeout (default: 10 second),
 * `longPollingTimeout` - in case you implement your custom app pull data worker, you are allowed to set long polling requests timeout (default: 30 seconds),
 * `userAgent` - your app user agent,
-* `cookieAuth` - allows you to authenticate request through cookies (default value is false and in that case access token will be added into request's query parameters),
+* `authType` - authentication method using `DaktelaAuthType` enum:
+  * `DaktelaAuthType.header` - token via X-AUTH-TOKEN header (default)
+  * `DaktelaAuthType.cookie` - token via Cookie header (c_user)
+  * `DaktelaAuthType.queryParam` - token in URL query parameter
+* `cookieAuth` - **@deprecated** use `authType` instead. Allows you to authenticate request through cookies (default value is false and in that case access token will be added into request's query parameters),
 * `acceptLanguage` - Accept-Language header value
 * `clientTimeZone` - client time zone (IANA TZ format, e.g. 'Europe/Prague'). NOTE: time zone is client's time zone so it's applied for authorized requests only.
 * `logger` - instance of `DaktelaLogger` that allows you to implement custom logging method,
@@ -44,7 +48,8 @@ var config = DaktelaConnectorConfig(
   url: 'my.daktela.com',
   accessToken: 'e10adc3949ba59abbe56e057f20f883e',
   userAgent: 'MyDaktelaClient-1.0.0',
-  cookieAuth: true,
+  // authType defaults to DaktelaAuthType.header (X-AUTH-TOKEN)
+  // other options: .cookie or .queryParam
   logger: logger,
   errors: DaktelaErrorMessages(general: 'Ooops'),
 );

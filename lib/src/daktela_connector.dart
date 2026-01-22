@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:daktela_connector/src/daktela_auth_type.dart';
 import 'package:daktela_connector/src/daktela_connector_config.dart';
 import 'package:daktela_connector/src/daktela_logger.dart';
 import 'package:http/http.dart' as http;
@@ -35,9 +36,23 @@ class DaktelaConnector {
     if (_config.userAgent.isNotEmpty) {
       headers['User-Agent'] = _config.userAgent;
     }
-    if (_config.accessToken.isNotEmpty && _config.cookieAuth) {
-      cookie = 'c_user=${_config.accessToken}';
+
+    switch (_config.effectiveAuthType) {
+      case DaktelaAuthType.header:
+        if (_config.accessToken.isNotEmpty) {
+          headers['X-AUTH-TOKEN'] = _config.accessToken;
+        }
+        break;
+      case DaktelaAuthType.cookie:
+        if (_config.accessToken.isNotEmpty) {
+          cookie = 'c_user=${_config.accessToken}';
+        }
+        break;
+      case DaktelaAuthType.queryParam:
+        // Token is added in query params, not headers
+        break;
     }
+
     if (_config.refreshToken != null) {
       cookie += '; c_refresh_token=${_config.refreshToken}';
     }
@@ -55,7 +70,7 @@ class DaktelaConnector {
   }
 
   Map<String, dynamic>? _enrichQueryParams(Map<String, dynamic>? query) {
-    if (!_config.cookieAuth) {
+    if (_config.effectiveAuthType == DaktelaAuthType.queryParam) {
       query ??= {};
       query['accessToken'] = _config.accessToken;
     }
