@@ -46,8 +46,32 @@ void main() {
     expect(data['user'], isNull);
   });
 
-  test('Access token test', () async {
-    var connector = DaktelaConnector.instance..config = DaktelaConnectorConfig(url: instance, accessToken: accessToken, cookieAuth: true);
+  test('Access token test (cookie auth)', () async {
+    var connector = DaktelaConnector.instance..config = DaktelaConnectorConfig(url: instance, accessToken: accessToken, authType: DaktelaAuthType.cookie);
+    var response = await connector.get('whoim.json');
+    expect(response.statusCode, 200);
+    expect(response.result, isA<Map<String, dynamic>>());
+    var data = response.result as Map<String, dynamic>;
+    expect(data.containsKey('user'), isTrue);
+    expect(data['user'], isNotNull);
+    expect(data['user']['_sys'], isNotNull);
+    expect(data['user']['_sys']['accessToken'], accessToken);
+  });
+
+  test('Access token test (X-AUTH-TOKEN header)', () async {
+    var connector = DaktelaConnector.instance..config = DaktelaConnectorConfig(url: instance, accessToken: accessToken, authType: DaktelaAuthType.header);
+    var response = await connector.get('whoim.json');
+    expect(response.statusCode, 200);
+    expect(response.result, isA<Map<String, dynamic>>());
+    var data = response.result as Map<String, dynamic>;
+    expect(data.containsKey('user'), isTrue);
+    expect(data['user'], isNotNull);
+    expect(data['user']['_sys'], isNotNull);
+    expect(data['user']['_sys']['accessToken'], accessToken);
+  });
+
+  test('Access token test (query param - default)', () async {
+    var connector = DaktelaConnector.instance..config = DaktelaConnectorConfig(url: instance, accessToken: accessToken, authType: DaktelaAuthType.queryParam);
     var response = await connector.get('whoim.json');
     expect(response.statusCode, 200);
     expect(response.result, isA<Map<String, dynamic>>());
@@ -117,7 +141,7 @@ void main() {
     test('Headers test', () async {
       var config = connector.config;
       var lang = 'de_DE';
-      connector.config = DaktelaConnectorConfig(url: config.url, accessToken: config.accessToken, cookieAuth: true, acceptLanguage: lang);
+      connector.config = DaktelaConnectorConfig(url: config.url, accessToken: config.accessToken, authType: DaktelaAuthType.cookie, acceptLanguage: lang);
       var response = await connector.get('whoim.json');
       expect(response.statusCode, 200);
       expect(response.result, isA<Map<String, dynamic>>());

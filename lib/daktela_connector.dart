@@ -1,3 +1,4 @@
+export 'src/daktela_auth_type.dart';
 export 'src/daktela_connector.dart';
 export 'src/daktela_connector_config.dart';
 export 'src/daktela_logger.dart';

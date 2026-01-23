@@ -1,3 +1,14 @@
+# 1.1.0
+
+Add `DaktelaAuthType` enum for flexible authentication methods:
+- `header` - Token via `X-AUTH-TOKEN` header (NEW, default)
+- `cookie` - Token via Cookie header (existing `cookieAuth` behavior)
+- `queryParam` - Token in URL query (previous default)
+
+**Breaking change:** Default authentication method changed from query parameter to X-AUTH-TOKEN header.
+
+The `cookieAuth` parameter is now deprecated in favor of `authType`.
+
 # 1.0.17
 
 Allow custom http client

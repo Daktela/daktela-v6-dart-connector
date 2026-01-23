@@ -1,3 +1,4 @@
+import 'package:daktela_connector/src/daktela_auth_type.dart';
 import 'package:daktela_connector/src/daktela_logger.dart';
 import 'package:http/http.dart' as http;
 
@@ -7,7 +8,8 @@ import 'package:http/http.dart' as http;
 /// [timeout] - request timeout
 /// [longPollingTimeout] - in case you implement your custom app pull data worker, you are allowed to set long polling requests timeout
 /// [userAgent] - your app user agent
-/// [cookieAuth] - allows you to authenticate request through cookies (default value is false and in that case access token will be added into request's query parameters)
+/// [authType] - authentication method (see [DaktelaAuthType]). If null, falls back to [cookieAuth] for backward compatibility.
+/// [cookieAuth] - @deprecated Use [authType] instead. Allows you to authenticate request through cookies (default value is false and in that case access token will be sent via X-AUTH-TOKEN header)
 /// [acceptLanguage] - Accept-Language header value
 /// [clientTimeZone] - client time zone (IANA TZ format, e.g. 'Europe/Prague'). NOTE: time zone is client's time zone so it's applied for authorized requests only.
 /// [logger] - instance of [DaktelaLogger]
@@ -22,6 +24,8 @@ class DaktelaConnectorConfig {
   final Duration longPollingTimeout;
 
   final String userAgent;
+  final DaktelaAuthType? authType;
+  @Deprecated('Use authType instead')
   final bool cookieAuth;
   final http.Client? httpClient;
   final String acceptLanguage;
@@ -30,6 +34,16 @@ class DaktelaConnectorConfig {
   final DaktelaLogger? logger;
   final DaktelaErrorMessages? errors;
 
+  /// Returns the effective authentication type.
+  /// Priority: explicit [authType] > [cookieAuth] > default [DaktelaAuthType.header]
+  DaktelaAuthType get effectiveAuthType {
+    if (authType != null) {
+      return authType!;
+    }
+    // ignore: deprecated_member_use_from_same_package
+    return cookieAuth ? DaktelaAuthType.cookie : DaktelaAuthType.header;
+  }
+
   DaktelaConnectorConfig({
     required this.url,
     this.accessToken = '',
@@ -37,7 +51,8 @@ class DaktelaConnectorConfig {
     this.timeout = const Duration(seconds: 10),
     this.longPollingTimeout = const Duration(seconds: 30),
     this.userAgent = '',
-    this.cookieAuth = false,
+    this.authType,
+    @Deprecated('Use authType instead') this.cookieAuth = false,
     this.acceptLanguage = '',
     this.clientTimeZone = '',
     this.logger,
@@ -52,7 +67,8 @@ class DaktelaConnectorConfig {
     Duration? timeout,
     Duration? longPollingTimeout,
     String? userAgent,
-    bool? cookieAuth,
+    DaktelaAuthType? authType,
+    @Deprecated('Use authType instead') bool? cookieAuth,
     String? acceptLanguage,
     String? clientTimeZone,
     DaktelaLogger? logger,
@@ -65,6 +81,8 @@ class DaktelaConnectorConfig {
       timeout: timeout ?? this.timeout,
       longPollingTimeout: longPollingTimeout ?? this.longPollingTimeout,
       userAgent: userAgent ?? this.userAgent,
+      authType: authType ?? this.authType,
+      // ignore: deprecated_member_use_from_same_package
       cookieAuth: cookieAuth ?? this.cookieAuth,
       acceptLanguage: acceptLanguage ?? this.acceptLanguage,
       clientTimeZone: clientTimeZone ?? this.clientTimeZone,
