@@ -1,3 +1,7 @@
+# 1.1.1
+
+Version bump. 1.1.0 was published to pub.dev from a working copy instead of the tagged commit.
+
 # 1.1.0
 
 Add `DaktelaAuthType` enum for flexible authentication methods:
